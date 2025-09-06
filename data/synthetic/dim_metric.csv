@@ -1,0 +1,5 @@
+MetricKey,MetricCode,MetricName
+1,ENERGY_KWH,Energy (kWh)
+2,CO2E_T,CO2e (t)
+3,COST_LOCAL,Cost (local)
+4,DELAY_DAYS,Delay (days)
