@@ -1,0 +1,7 @@
+```mermaid
+erDiagram
+  DimDate ||--o{ FactMeasurements : "DateKey"
+  DimLocation ||--o{ FactMeasurements : "LocationKey"
+  DimAsset ||--o{ FactMeasurements : "AssetKey"
+  DimMetric ||--o{ FactMeasurements : "MetricKey"
+```

@@ -1,0 +1,26 @@
+{
+  "name": "AS Dark Minimal",
+  "foreground": "#EAEAEA",
+  "background": "#111111",
+  "dataColors": [
+    "#E53935",
+    "#43A047",
+    "#1E88E5",
+    "#FDD835",
+    "#8E24AA",
+    "#00897B"
+  ],
+  "visualStyles": {
+    "*": {
+      "labels": [
+        {
+          "color": {
+            "solid": {
+              "color": "#EAEAEA"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

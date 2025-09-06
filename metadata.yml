@@ -1,0 +1,11 @@
+repo_name: p2-nordic-infra-sustainability-fabric-powerbi
+owner: Alexis Sayago (asaygom)
+version: 0.9.0
+created: 2025-09-06
+updated: 2025-09-06
+description: Power BI + (Fabric/Dataflows) demo for energy/CO2e/delay/cost across Nordic infra assets.
+tags: [power-bi, dax, star-schema, fabric, dataflows, esg, contech]
+code_license: MIT
+data_license: CC BY 4.0
+languages: [en, es]
+stack: [Power BI, DAX, (Fabric|Dataflows Gen2), CSV]

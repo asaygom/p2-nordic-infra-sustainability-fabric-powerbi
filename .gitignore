@@ -1,0 +1,17 @@
+# Power BI
+*.pbix
+*.pbit
+/pbix/
+
+# Media derived
+/media/*.mp4
+/media/*.mov
+
+# Local data (raw/processed)
+/data/raw/*
+/data/processed/*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
