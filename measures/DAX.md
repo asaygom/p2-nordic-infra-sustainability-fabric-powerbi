@@ -4,43 +4,54 @@
 ```DAX
 Date =
 ADDCOLUMNS(
-    CALENDAR(DATE(2023,1,1), DATE(2026,12,31)),
-    "Year", YEAR([Date]),
-    "Month", MONTH([Date]),
-    "MonthName", FORMAT([Date], "MMM"),
-    "Quarter", "Q" & FORMAT(ROUNDUP(MONTH([Date])/3,0), "0"),
-    "YearMonth", FORMAT([Date], "YYYY-MM")
+  CALENDAR(DATE(2024,1,1), DATE(2025,12,31)),
+  "DateKey", VALUE(FORMAT([Date], "YYYYMMDD")),
+  "Year", YEAR([Date]),
+  "Month", MONTH([Date]),
+  "MonthName", FORMAT([Date], "MMM"),
+  "Quarter", "Q" & FORMAT(ROUNDUP(MONTH([Date])/3,0), "0"),
+  "YearMonth", FORMAT([Date], "YYYY-MM")
 )
+
 ```
 > Mark `Date[Date]` as date table. Disable Auto Date/Time.
 
 ## Base
 ```DAX
-Value Actual := SUM('FactMeasurements'[ActualValue])
-Value Plan   := SUM('FactMeasurements'[PlanValue])
-Variance     := [Value Actual] - [Value Plan]
-Variance %   := DIVIDE([Variance], [Value Plan])
+ValueActual := SUM('fact_measurements'[ActualValue])
+ValuePlan   := SUM('fact_measurements'[PlanValue])
+Variance    := [ValueActual] - [ValuePlan]
+VariancePct := DIVIDE([Variance], [ValuePlan], 0)
 ```
 
-## Metric-scoped (uses `DimMetric[MetricCode]`)
+## Metric-scoped (uses `dim_metric[MetricCode]`)
 ```DAX
-Energy | Actual (kWh) := CALCULATE([Value Actual], 'DimMetric'[MetricCode] = "ENERGY_KWH")
-Energy | Plan (kWh)   := CALCULATE([Value Plan],   'DimMetric'[MetricCode] = "ENERGY_KWH")
-Energy | Variance %   := DIVIDE([Energy | Actual (kWh)] - [Energy | Plan (kWh)], [Energy | Plan (kWh)])
+EnergyActualKWh := CALCULATE([ValueActual], 'dim_metric'[MetricCode] = "ENERGY_KWH")
+EnergyPlanKWh   := CALCULATE([ValuePlan],   'dim_metric'[MetricCode] = "ENERGY_KWH")
+EnergyVarPct    := DIVIDE([EnergyActualKWh] - [EnergyPlanKWh], [EnergyPlanKWh])
 
-CO2e | Actual (t)     := CALCULATE([Value Actual], 'DimMetric'[MetricCode] = "CO2E_T")
+CO2eActualT     := CALCULATE([ValueActual], 'dim_metric'[MetricCode] = "CO2E_T")
+CostActualLocal := CALCULATE([ValueActual], 'dim_metric'[MetricCode] = "COST_LOCAL")
+DelayDays       := CALCULATE([ValueActual], 'dim_metric'[MetricCode] = "DELAY_DAYS")
 
-Cost | Actual (Local) := CALCULATE([Value Actual], 'DimMetric'[MetricCode] = "COST_LOCAL")
-Cost | per kWh        := DIVIDE([Cost | Actual (Local)], [Energy | Actual (kWh)])
-
-Delay | Days          := CALCULATE([Value Actual], 'DimMetric'[MetricCode] = "DELAY_DAYS")
+CostPerKWh        := DIVIDE([CostActualLocal], [EnergyActualKWh])
 ```
 
 ## Time‑intelligence
 ```DAX
-Energy | YTD (kWh) := TOTALYTD([Energy | Actual (kWh)], 'DimDate'[Date])
-Energy | MTD (kWh) := TOTALMTD([Energy | Actual (kWh)], 'DimDate'[Date])
-Energy | QTD (kWh) := TOTALQTD([Energy | Actual (kWh)], 'DimDate'[Date])
+EnergyYTDKWh := TOTALYTD([EnergyActualKWh], 'Date'[Date])
+EnergyMTDKWh := TOTALMTD([EnergyActualKWh], 'Date'[Date])
+EnergyQTDKWh := TOTALQTD([EnergyActualKWh], 'Date'[Date])
 
-CO2e | YTD (t) := TOTALYTD([CO2e | Actual (t)], 'DimDate'[Date])
+CO2eYTDT     := TOTALYTD([CO2eActualT], 'Date'[Date])
+CO2eMTDT     := TOTALMTD([CO2eActualT], 'Date'[Date])
+CO2eQTDT     := TOTALQTD([CO2eActualT], 'Date'[Date])
+
+CostYTDLocal  := TOTALYTD([CostActualLocal], 'Date'[Date])
+CostMTDLocal  := TOTALMTD([CostActualLocal], 'Date'[Date])
+CostQTDLocal  := TOTALQTD([CostActualLocal], 'Date'[Date])
+
+DelayYTDDays  := TOTALYTD([DelayDays], 'Date'[Date])
+DelayMTDDays  := TOTALMTD([DelayDays], 'Date'[Date])
+DelayQTDDays  := TOTALQTD([DelayDays], 'Date'[Date])
 ```
