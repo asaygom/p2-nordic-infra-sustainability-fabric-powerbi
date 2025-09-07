@@ -31,6 +31,10 @@ Faster variance detection at city/asset level; supports scenario analysis via sl
 ## Limitations
 Synthetic data only; Fabric/Dataflows optional; costs shown in a single local currency.
 
+**Demo pack**
+- [One-pager (PDF)](media/one-pager_v0.9_en.pdf)
+- [GIF 90s](media/demo-90s_v0.9.gif)
+
 ## Roadmap to v1.0
 - Add accessibility checks, refine What‑if, publish to Service and document refresh.
 

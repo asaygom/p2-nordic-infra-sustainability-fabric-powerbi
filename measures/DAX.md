@@ -10,7 +10,9 @@ ADDCOLUMNS(
   "Month", MONTH([Date]),
   "MonthName", FORMAT([Date], "MMM"),
   "Quarter", "Q" & FORMAT(ROUNDUP(MONTH([Date])/3,0), "0"),
-  "YearMonth", FORMAT([Date], "YYYY-MM")
+  "YearMonth", FORMAT([Date], "YYYY-MM"),
+  "YearMonthNum", YEAR([Date]) * 100 + MONTH([Date]),
+  "MonthSort", MONTH([Date])
 )
 
 ```
@@ -54,4 +56,10 @@ CostQTDLocal  := TOTALQTD([CostActualLocal], 'Date'[Date])
 DelayYTDDays  := TOTALYTD([DelayDays], 'Date'[Date])
 DelayMTDDays  := TOTALMTD([DelayDays], 'Date'[Date])
 DelayQTDDays  := TOTALQTD([DelayDays], 'Date'[Date])
+```
+## What-if (uses energy adjustment parameter `EnergyAdj = GENERATESERIES(0.8, 1.2, 0.02)`)
+```DAX
+EnergyAdjActualKWh = [EnergyActualKWh] * SELECTEDVALUE(EnergyAdj[EnergyAdj], 1)
+
+EnergyAdjVarPct = DIVIDE([EnergyAdjActualKWh] - [EnergyPlanKWh], [EnergyPlanKWh])
 ```
