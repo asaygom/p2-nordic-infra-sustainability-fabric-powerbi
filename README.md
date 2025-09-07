@@ -2,6 +2,10 @@
 
 **One‑liner:** Energy, CO2e, delay and cost by city (CPH/STH/OSL) with an executive view and a What‑if page.
 
+**Demo pack**
+- [One-pager (PDF)](media/one-pager_v0.9_en.pdf)
+- [GIF 90s](media/demo-90s_v0.9.gif)
+
 ## Problem
 Executives need a single place to compare energy/CO2e vs plan and understand delays/cost per city/asset.
 
@@ -31,9 +35,23 @@ Faster variance detection at city/asset level; supports scenario analysis via sl
 ## Limitations
 Synthetic data only; Fabric/Dataflows optional; costs shown in a single local currency.
 
-**Demo pack**
-- [One-pager (PDF)](media/one-pager_v0.9_en.pdf)
-- [GIF 90s](media/demo-90s_v0.9.gif)
+## Fabric path (included)
+
+This repo also ships a minimal Microsoft Fabric setup for governance and reuse:
+
+- **Lakehouse**: `p2_nordic_infra` with 5 Delta tables (`dim_date`, `dim_location`, `dim_asset`, `dim_metric`, `fact_measurements`).
+- **Semantic model**: `p2_nordic_infra_semantic` (1:* relationships, `Date` marked as Date table, DAX measures aligned with `/measures/DAX.md`).
+- **Thin report**: connected live to the semantic model (no data/model inside the PBIX).
+
+**Lineage:** Lakehouse → Semantic model → Thin report.  
+**Screenshots:**  
+![Lakehouse tables](media/fabric-lakehouse_tables.png)  
+![Semantic model](media/fabric-semantic_model.png)
+![Lineage view](media/fabric-lineage_view.png)
+
+**Notes**
+- Direct Lake over Delta tables (no dataset refresh required for model changes).
+- If you add Dataflows Gen2 later, schedule them; the thin report will pick up updates via the semantic model.
 
 ## Roadmap to v1.0
 - Add accessibility checks, refine What‑if, publish to Service and document refresh.
